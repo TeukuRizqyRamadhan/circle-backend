@@ -19,7 +19,7 @@ app.get("/", (req, res) => {
    res.send("CIRCLE APP - API");
 });
 
-app.listen(PORT, async () => {
+app.listen(+PORT, async () => {
    await db.$connect();
    console.log("Server is running at port " + PORT);
 });
