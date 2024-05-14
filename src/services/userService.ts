@@ -66,3 +66,11 @@ export function updateUserV2(id: string, body: User): Promise<User> {
       data: body,
    });
 }
+
+export const getSingleUser = async (condition: {
+   [key: string]: string;
+}): Promise<User | null> => {
+   return db.user.findFirst({
+      where: condition,
+   });
+};
