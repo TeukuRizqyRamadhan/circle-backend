@@ -30,12 +30,15 @@ model User {
 }
 
 model Thread {
-  id      String        @id @default(uuid())
-  content String
-  userId  String
-  author  User          @relation(fields: [userId], references: [id])
-  image   ThreadImage[]
-  like    Like[]
+  id       String        @id @default(uuid())
+  content  String
+  userId   String
+  threadId String?
+  author   User          @relation(fields: [userId], references: [id])
+  image    ThreadImage[]
+  like     Like[]
+  parent   Thread?       @relation("replies", fields: [threadId], references: [id])
+  replies  Thread[]      @relation("replies")
 }
 
 model ThreadImage {
