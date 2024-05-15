@@ -10,6 +10,16 @@ export const getUser = async (id: string): Promise<User | null> => {
    });
 };
 
+export const getAllUsers = async () => {
+   return await db.user.findMany({
+      select: {
+         id: true,
+         fullname: true,
+         email: true,
+      },
+   });
+};
+
 export const insertUser = async (body: User): Promise<User> => {
    return db.user.create({
       data: body,

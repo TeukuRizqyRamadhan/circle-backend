@@ -9,7 +9,7 @@ export const insertThread = async (
       data: body,
    });
 
-   if (Array.from(files.image)) {
+   if (files.image && files.image.length > 0) {
       await db.threadImage.createMany({
          data: files.image.map((img) => ({
             url: img.filename,
@@ -17,6 +17,7 @@ export const insertThread = async (
          })),
       });
    }
+
 
    return thread;
 };
@@ -56,6 +57,26 @@ export const getThreads = async () => {
                url: true,
             },
          },
+         replies: {
+            select: {
+               id: true,
+               content: true,
+               image: {
+                  select: {
+                     url: true,
+                  }
+
+               },
+               author: {
+                  select: {
+                     fullname: true,
+                     id: true,
+                     email: true
+                  }
+               }
+
+            }
+         }
       },
    });
 };
