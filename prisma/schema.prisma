@@ -26,7 +26,17 @@ model User {
   threads    Thread[]
   followedBy Follow[] @relation("followedBy")
   following  Follow[] @relation("following")
+  profile    Profile?
   like       Like[]
+}
+
+model Profile {
+  id     Int     @id @default(autoincrement())
+  userId String  @unique
+  user   User    @relation(fields: [userId], references: [id])
+  avatar String?
+  cover  String?
+  bio    String?
 }
 
 model Thread {

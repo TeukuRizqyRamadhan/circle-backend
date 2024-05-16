@@ -80,3 +80,24 @@ export const getThreads = async () => {
       },
    });
 };
+
+export const updateThread = async (
+   body: Thread,
+   files: { [fieldname: string]: Express.Multer.File[] }
+) => {
+   const thread = await db.thread.update({
+      where: {
+         id: body.id,
+      },
+      data: body,
+   });
+   if (files.image && files.image.length > 0) {
+      await db.threadImage.createMany({
+         data: files.image.map((img) => ({
+            url: img.filename,
+            threadId: thread.id,
+         })),
+      });
+   }
+   return thread
+}
