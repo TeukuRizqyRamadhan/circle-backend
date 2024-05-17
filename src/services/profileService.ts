@@ -22,6 +22,7 @@ export const updateProfile = async (
             data: body,
             select: {
                 id: true,
+                username: true,
                 bio: true,
                 avatar: true,
                 cover: true
@@ -38,11 +39,19 @@ export const updateProfile = async (
 
 
 export const getProfile = async (userId: string) => {
-    return await db.profile.findFirst({
+
+
+    const existProfile = await db.profile.findFirst({
         where: {
             userId: userId
         }, include: {
             user: true
         }
     })
+
+    if (!existProfile) {
+        throw new Error("Profile not found");
+    }
+
+    return existProfile
 }
