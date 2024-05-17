@@ -3,6 +3,7 @@ import * as likeService from "../services/likeService";
 import * as threadService from "../services/threadService";
 import { errorHandler } from "../utils/errorHandler";
 import { log } from "console";
+import db from "../lib/db";
 
 export const createLike = async (req: Request, res: Response) => {
     try {
@@ -34,12 +35,12 @@ export const getLikes = async (req: Request, res: Response) => {
         if (!thread) {
             return res.status(404).json({
                 success: false,
-                message: "Thread tidak ditemukan",
+                message: true
             });
         }
         if (!likes || likes.length === 0) {
             return res.json({
-                message: "thread belum ada likenya bosku",
+                message: true,
             })
         }
         res.status(200).json({
@@ -74,16 +75,17 @@ export const getCurrentLike = async (req: Request, res: Response) => {
         }
 
         const like = await likeService.getCurrentLike(threadId, userId);
+        const totalLike = await db.like.count({
+            where: {
+                threadId: threadId,
+            },
+        });
 
-        if (!like) {
-            return res.json({
-                message: "belum di like bosku",
-            })
-        }
         res.json({
+            thread,
             success: true,
-            message: "Sudah di like bosku",
-            like: like
+            like,
+            totalLike
         })
     } catch (error) {
         const err = error as unknown as Error;
