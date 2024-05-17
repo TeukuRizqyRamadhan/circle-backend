@@ -1,5 +1,6 @@
 import { Thread } from "@prisma/client";
 import db from "../lib/db";
+import { threadId } from "worker_threads";
 
 export const insertThread = async (
    body: Thread,
@@ -32,6 +33,7 @@ export const getThread = async (id: string) => {
             select: {
                id: true,
                fullname: true,
+               profile: true,
             },
          },
          image: {
@@ -45,11 +47,15 @@ export const getThread = async (id: string) => {
 
 export const getThreads = async () => {
    return await db.thread.findMany({
+      where: {
+         threadId: null
+      },
       include: {
          author: {
             select: {
                id: true,
                fullname: true,
+               profile: true,
             },
          },
          image: {
@@ -57,6 +63,50 @@ export const getThreads = async () => {
                url: true,
             },
          },
+         like: true,
+         replies: {
+            select: {
+               id: true,
+               content: true,
+               image: {
+                  select: {
+                     url: true,
+                  }
+
+               },
+               author: {
+                  select: {
+                     fullname: true,
+                     id: true,
+                     email: true
+                  }
+               }
+
+            }
+         }
+      },
+   });
+};
+
+export const getRepliesThreads = async () => {
+   return await db.thread.findMany({
+      where: {
+         threadId: { not: null },
+      },
+      include: {
+         author: {
+            select: {
+               id: true,
+               fullname: true,
+               profile: true,
+            },
+         },
+         image: {
+            select: {
+               url: true,
+            },
+         },
+         like: true,
          replies: {
             select: {
                id: true,

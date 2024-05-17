@@ -26,6 +26,7 @@ const register = async (body: User): Promise<{ id: string }> => {
       throw new Error(ERROR_MESSAGE.EXISTED_DATA);
    }
 
+
    // 3. hash password
    const hashedPassword = await bcrypt.hash(value.password, 10);
 
@@ -33,6 +34,22 @@ const register = async (body: User): Promise<{ id: string }> => {
       ...value,
       password: hashedPassword,
    });
+
+   const usernameUUIDpart = user.id.substring(0, 8).replace(/-/g, '')
+   const uconvert = `user_${usernameUUIDpart}_${body.fullname.replace(/\s/g, '_')}`
+   const profile = await db.profile.create({
+      data: {
+         userId: user.id,
+         username: uconvert,
+         bio: "",
+         avatar: "",
+         cover: ""
+      }
+   })
+
+   console.log(profile);
+
+
 
    return { id: user.id };
 };

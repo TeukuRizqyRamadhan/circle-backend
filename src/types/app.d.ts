@@ -4,6 +4,7 @@ export interface IErrorObj {
 
 export interface IProfile {
    bio?: string;
+   username?: string;
    avatar?: string;
    cover?: string;
    userId?: string;

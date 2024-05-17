@@ -82,5 +82,8 @@ export const getSingleUser = async (condition: {
 }): Promise<User | null> => {
    return db.user.findFirst({
       where: condition,
+      include: {
+         profile: true,
+      }
    });
 };
