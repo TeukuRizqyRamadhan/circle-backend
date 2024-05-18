@@ -49,7 +49,9 @@ export const getProfile = async (userId: string) => {
                 select: {
                     id: true,
                     fullname: true,
-                    email: true
+                    email: true,
+                    followedBy: true,
+                    following: true
                 }
             }
         }

@@ -4,16 +4,16 @@ import db from "../lib/db";
 export const follow = async (followedById: string, followingId: string) => {
     const existingFollow = await db.follow.findFirst({
         where: {
-            followedById,
-            followingId
+            followedById: followingId,
+            followingId: followedById
         }
     })
 
     if (existingFollow) {
         await db.follow.deleteMany({
             where: {
-                followedById,
-                followingId
+                followedById: followingId,
+                followingId: followedById
             }
         })
         return ("unfollow sukses")
@@ -21,8 +21,8 @@ export const follow = async (followedById: string, followingId: string) => {
 
     await db.follow.create({
         data: {
-            followedById: followedById,
-            followingId: followingId
+            followedById: followingId,
+            followingId: followedById
         }
     })
     return ("follow sukses")
