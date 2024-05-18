@@ -141,7 +141,16 @@ export const updateThread = async (
       },
       data: body,
    });
+
    if (files.image && files.image.length > 0) {
+      // Hapus gambar lama yang terkait dengan thread
+      await db.threadImage.deleteMany({
+         where: {
+            threadId: thread.id,
+         },
+      });
+
+      // Tambahkan gambar baru
       await db.threadImage.createMany({
          data: files.image.map((img) => ({
             url: img.filename,
@@ -149,5 +158,6 @@ export const updateThread = async (
          })),
       });
    }
-   return thread
+
+   return thread;
 }

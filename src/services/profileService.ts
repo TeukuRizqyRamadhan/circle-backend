@@ -45,7 +45,13 @@ export const getProfile = async (userId: string) => {
         where: {
             userId: userId
         }, include: {
-            user: true
+            user: {
+                select: {
+                    id: true,
+                    fullname: true,
+                    email: true
+                }
+            }
         }
     })
 
